@@ -54,7 +54,7 @@ const AI = () => {
 
       dispatch(addMessage({ role: "model", parts: [parsed] }));
 
-      // ✅ Stop loading when message received successfully
+      // Stop loading when message received successfully
       setLoading(false);
     } catch (error) {
       console.error(error);
