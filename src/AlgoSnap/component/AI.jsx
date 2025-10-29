@@ -18,7 +18,7 @@ const AI = () => {
   // React Hook Form setup
   const {
     register,
-    handleSubmit,
+    handleSubmit,            
     reset,
     formState: { errors },
   } = useForm();
