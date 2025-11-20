@@ -162,7 +162,7 @@ function App() {
         {/* Landing Page (Page1) */}
         <Route
           path="/"
-          element={isAuthenticated ? <HomePage /> : <Navigate to="/login" />}
+          element={isAuthenticated ? <HomePage /> : <Navigate to="/signup" />}
         />
 
         <Route path="/home" element={<Home />} />
