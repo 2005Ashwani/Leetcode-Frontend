@@ -3,6 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import axiosClient from "../utils/axiosClient";
 import { useNavigate } from "react-router";
+import { useSelector } from "react-redux";
 
 // Zod schema matching the problem schema
 const problemSchema = z.object({
@@ -47,6 +48,7 @@ const problemSchema = z.object({
 
 export default function ModifyProblem() {
   const navigate = useNavigate();
+  const { theme } = useSelector((state) => state.theme);
   const {
     register,
     control,
@@ -141,13 +143,13 @@ export default function ModifyProblem() {
   };
 
   return (
-    <div className="container mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-6">Create New Problem</h1>
+    <div data-theme={theme} className="container mx-auto p-6 min-h-screen bg-gradient-to-br from-base-100 via-base-200 to-base-300">
+      <h1 className="text-3xl font-bold mb-6 text-center bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent animate-pulse">Create New Problem</h1>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {/* Basic Information */}
-        <div className="card bg-base-100 shadow-lg p-6">
-          <h2 className="text-xl font-semibold mb-4">Basic Information</h2>
+        <div className="card bg-base-100 shadow-xl p-6 rounded-xl border border-base-300 hover:shadow-2xl transition-shadow duration-300">
+          <h2 className="text-xl font-semibold mb-4 text-primary">Basic Information</h2>
           <div className="space-y-4">
             <div className="form-control">
               <label className="label">
@@ -217,8 +219,8 @@ export default function ModifyProblem() {
         </div>
 
         {/* Test Cases */}
-        <div className="card bg-base-100 shadow-lg p-6">
-          <h2 className="text-xl font-semibold mb-4">Test Cases</h2>
+        <div className="card bg-base-100 shadow-xl p-6 rounded-xl border border-base-300 hover:shadow-2xl transition-shadow duration-300">
+          <h2 className="text-xl font-semibold mb-4 text-primary">Test Cases</h2>
 
           {/* Visible Test Cases */}
           <div className="space-y-4 mb-6">
@@ -310,8 +312,8 @@ export default function ModifyProblem() {
         </div>
 
         {/* Code Templates */}
-        <div className="card bg-base-100 shadow-lg p-6">
-          <h2 className="text-xl font-semibold mb-4">Code Templates</h2>
+        <div className="card bg-base-100 shadow-xl p-6 rounded-xl border border-base-300 hover:shadow-2xl transition-shadow duration-300">
+          <h2 className="text-xl font-semibold mb-4 text-primary">Code Templates</h2>
 
           <div className="space-y-6">
             {[0, 1, 2].map((index) => (
@@ -350,7 +352,7 @@ export default function ModifyProblem() {
           </div>
         </div>
 
-        <button type="submit" className="btn btn-primary w-full">
+        <button type="submit" className="btn btn-primary w-full btn-lg hover:scale-105 transition-transform duration-200 shadow-lg hover:shadow-xl">
           Create Problem
         </button>
       </form>

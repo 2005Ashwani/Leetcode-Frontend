@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import axiosClient from "../utils/axiosClient";
-import { motion } from "framer-motion"; // For smooth animations
+
 import { MdDeleteForever } from "react-icons/md"; // For a modern delete icon
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 export default function RemoveProblem() {
   const navigate = useNavigate();
+  const { theme } = useSelector((state) => state.theme);
 
   const [allProblem, setAllProblem] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -84,12 +86,12 @@ export default function RemoveProblem() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-100 font-sans p-6">
+    <div data-theme={theme} className="min-h-screen bg-gradient-to-br from-base-100 via-base-200 to-base-300 text-base-content font-sans p-6">
       <motion.h1
         initial={{ y: -50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="flex justify-center text-4xl font-extrabold mb-8 text-purple-400 drop-shadow-lg"
+        className="flex justify-center text-4xl font-extrabold mb-8 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent animate-pulse drop-shadow-lg"
         style={{ fontFamily: "'Poppins', sans-serif" }}
       >
         Remove Problem
@@ -126,7 +128,7 @@ export default function RemoveProblem() {
               key={problem._id}
               variants={itemVariants}
               layout // Enable layout animations for smooth removal
-              className="bg-gray-800 rounded-lg shadow-xl p-4 flex flex-col sm:flex-row items-center justify-between transition-all duration-300 hover:bg-gray-700 hover:shadow-2xl border border-gray-700 group" // Added group for hover effects
+              className="card bg-base-100 rounded-xl shadow-xl p-4 flex flex-col sm:flex-row items-center justify-between transition-all duration-300 hover:shadow-2xl border border-base-300 group" // Added group for hover effects
             >
               <button
                 className="flex items-center flex-grow cursor-pointer text-left py-2 px-3 rounded-lg hover:bg-gray-700/50 transition-colors duration-200 w-full sm:w-auto"
@@ -170,10 +172,10 @@ export default function RemoveProblem() {
                 onClick={() => handleDeleteProblem(problem._id)}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className={`ml-0 mt-4 sm:mt-0 sm:ml-6 flex-shrink-0 flex items-center px-4 py-2 rounded-full text-white font-semibold transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 min-w-[120px] justify-center cursor-pointer ${
+                className={`ml-0 mt-4 sm:mt-0 sm:ml-6 flex-shrink-0 flex items-center px-4 py-2 rounded-full font-semibold transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 min-w-[120px] justify-center cursor-pointer btn btn-error ${
                   deletingId === problem._id
-                    ? "bg-red-700 cursor-not-allowed opacity-70"
-                    : "bg-red-600 hover:bg-red-700"
+                    ? "btn-disabled"
+                    : ""
                 }`}
                 disabled={deletingId === problem._id}
               >

@@ -1,12 +1,16 @@
 
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { FaBars, FaTimes, FaGithub, FaListUl } from "react-icons/fa";
+import { FaBars, FaTimes, FaGithub, FaListUl, FaMoon, FaSun } from "react-icons/fa";
 import { BiBracket } from "react-icons/bi";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleTheme } from "../../redux/Theme";
 
 export default function Navigation() {
   const [isMobile, setIsMobile] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const dispatch = useDispatch();
+  const theme = useSelector((state) => state.theme.theme);
 
   useEffect(() => {
     const handleResize = () => {
@@ -24,14 +28,18 @@ export default function Navigation() {
     setMenuOpen(!menuOpen);
   };
 
+  const handleThemeToggle = () => {
+    dispatch(toggleTheme());
+  };
+
   return (
     <nav className="fixed top-0 left-0 w-full bg-base-100 text-base-content font-semibold shadow-lg font-[Poppins] z-50">
       <div className="container mx-auto px-3 sm:px-6 py-4 flex justify-between items-center">
         {/* Render appropriate navigation based on screen size */}
         {isMobile ? (
-          <MobileNavigation isOpen={menuOpen} toggleMenu={toggleMenu} />
+          <MobileNavigation isOpen={menuOpen} toggleMenu={toggleMenu} onThemeToggle={handleThemeToggle} theme={theme} />
         ) : (
-          <DesktopNavigation />
+          <DesktopNavigation onThemeToggle={handleThemeToggle} theme={theme} />
         )}
       </div>
     </nav>
@@ -39,7 +47,7 @@ export default function Navigation() {
 }
 
 // Desktop Navigation Component
-function DesktopNavigation() {
+function DesktopNavigation({ onThemeToggle, theme }) {
   const navLinks = [
     { to: "/AI", text: "APNA AI" },
     { to: "/", text: "HOME" },
@@ -85,13 +93,21 @@ function DesktopNavigation() {
                           origin-left duration-300"></span>
           </Link>
         ))}
+        {/* Theme Toggle Button */}
+        <button
+          onClick={onThemeToggle}
+          className="btn btn-ghost btn-circle hover:bg-base-200 transition-all duration-300"
+          aria-label="Toggle theme"
+        >
+          {theme === 'light' ? <FaMoon className="text-xl" /> : <FaSun className="text-xl" />}
+        </button>
       </div>
     </>
   );
 }
 
 // Mobile Navigation Component
-function MobileNavigation({ isOpen, toggleMenu }) {
+function MobileNavigation({ isOpen, toggleMenu, onThemeToggle, theme }) {
   const navLinks = [
     { to: "/AI", text: "APNA AI", icon: "🤖" },
     { to: "/", text: "HOME", icon: "🏠" },
@@ -117,14 +133,23 @@ function MobileNavigation({ isOpen, toggleMenu }) {
 
   return (
     <>
-      {/* Hamburger Button */}
-      <button
-        className="text-2xl focus:outline-none z-50 text-base-content"
-        onClick={toggleMenu}
-        aria-label="Toggle menu"
-      >
-        {isOpen ? <FaTimes /> : <FaBars />}
-      </button>
+      {/* Hamburger Button and Theme Toggle */}
+      <div className="flex items-center gap-4">
+        <button
+          onClick={onThemeToggle}
+          className="btn btn-ghost btn-circle hover:bg-base-200 transition-all duration-300"
+          aria-label="Toggle theme"
+        >
+          {theme === 'light' ? <FaMoon className="text-xl" /> : <FaSun className="text-xl" />}
+        </button>
+        <button
+          className="text-2xl focus:outline-none z-50 text-base-content"
+          onClick={toggleMenu}
+          aria-label="Toggle menu"
+        >
+          {isOpen ? <FaTimes /> : <FaBars />}
+        </button>
+      </div>
 
       {/* Mobile Menu Overlay */}
       <div

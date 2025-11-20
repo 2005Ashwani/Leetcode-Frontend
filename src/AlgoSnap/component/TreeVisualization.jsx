@@ -401,29 +401,7 @@ export default function TreeVisualization() {
     return nodeExists(node.left, value) || nodeExists(node.right, value);
   };
 
-  // Heapify up for max-heap
-  const heapifyUp = (root, newNode) => {
-    // Find path from root to new node
-    const path = findPathToNode(root, newNode);
-    if (!path) return root;
 
-    // Bubble up the new value to maintain max-heap property
-    let current = newNode;
-    for (let i = path.length - 2; i >= 0; i--) {
-      const parent = path[i];
-      if (current.value > parent.value) {
-        // Swap values
-        const temp = current.value;
-        current.value = parent.value;
-        parent.value = temp;
-        current = parent;
-      } else {
-        break;
-      }
-    }
-
-    return root;
-  };
 
   // Find path from root to a specific node
   const findPathToNode = (root, targetNode) => {

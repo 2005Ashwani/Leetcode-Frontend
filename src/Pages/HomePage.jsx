@@ -3,11 +3,16 @@ import { useDispatch, useSelector } from "react-redux";
 import axiosClient from "../utils/axiosClient";
 import { logoutUser } from "../redux/authSlice";
 import { useEffect, useState } from "react";
-import { ThermometerSun } from "lucide-react";
+// Renamed the icon for clarity in the context of dark/light mode
+import { Sun, Moon } from "lucide-react";
+import { toggleTheme } from "../redux/Theme";
 
 function HomePage() {
+
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
+  // Reading the theme from Redux state (which is a string: 'light' or 'dark')
+  const { theme } = useSelector((state) => state.theme); 
 
   const [problem, setProblem] = useState([]);
   const [solvedProblem, setSolvedProblem] = useState([]);
@@ -90,16 +95,22 @@ function HomePage() {
     startIndex + problemsPerPage
   );
 
-  // To Show
-  useEffect(() => {
-    console.log(user.profileImage);
-  });
+  // Theme Toggle Function: Dispatches the Redux action
+  const handleToggleTheme = () => {
+    dispatch(toggleTheme());
+  };
 
   // UI
   return (
-    <div className="min-h-screen bg-base-200">
+    // 1. **Apply the theme using data-theme**
+    <div 
+        className="min-h-screen bg-base-200" 
+        data-theme={theme} // Uses 'light' or 'dark' 
+    >
       {/* Navbar */}
-      <nav className="navbar bg-base-100 shadow-lg px-6 sticky top-0 z-50">
+      <nav
+        className="navbar shadow-lg px-6 sticky top-0 z-50 bg-base-100"
+      >
         <div className="flex items-center justify-between w-full">
           {/* Left Section – Logo */}
           <div className="flex items-center gap-2">
@@ -111,10 +122,10 @@ function HomePage() {
           </div>
 
           {/* Center Section – Links */}
-          <div className="hidden md:flex items-center gap-8 text-lg font-medium text-gray-600">
+          <div className="hidden md:flex items-center gap-8 text-lg font-medium text-base-content">
             <NavLink
               to="/page1"
-              className="hover:text-indigo-500 transition-colors duration-200"
+              className="hover:text-primary transition-colors duration-200"
             >
               Learn DSA
             </NavLink>
@@ -123,7 +134,15 @@ function HomePage() {
           {/* Right Section – Theme + Profile */}
           <div className="flex items-center gap-5">
             {/* Mode Toggle */}
-            <ThermometerSun className="cursor-pointer hover:scale-110 transition-transform duration-200" />
+            {/* 🛑 FIX 1: Use handleToggleTheme function */}
+            <button onClick={handleToggleTheme}> 
+              {/* 🛑 FIX 2: Use theme string from Redux for conditional icon rendering */}
+              {theme === 'light' ? ( 
+                <Moon className="cursor-pointer hover:scale-110 transition-transform duration-200" />
+              ) : (
+                <Sun className="cursor-pointer hover:scale-110 transition-transform duration-200" />
+              )}
+            </button>
 
             {/* Profile Image / Auth Buttons */}
             {user ? (
@@ -131,16 +150,17 @@ function HomePage() {
                 <div
                   tabIndex={0}
                   role="button"
-                  className="flex items-center gap-2 btn btn-ghost px-2 py-1 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+                  // Simplified hover classes for dark/light mode consistency
+                  className="flex items-center gap-2 btn btn-ghost px-2 py-1 rounded-xl hover:bg-base-300 transition"
                 >
                   <img
                     src={user.profileImage}
                     alt="User profile"
-                    className="h-10 w-10 rounded-full object-cover object-[50%_60%] border-2 border-gray-300 dark:border-gray-700 shadow-sm hover:scale-105 transition-transform duration-200"
+                    className="h-10 w-10 rounded-full object-cover object-[50%_60%] border-2 border-base-300 shadow-sm hover:scale-105 transition-transform duration-200"
                   />
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4 text-gray-600"
+                    className="h-4 w-4 text-base-content" 
                     viewBox="0 0 20 20"
                     fill="currentColor"
                   >
@@ -220,11 +240,13 @@ function HomePage() {
             placeholder="Search by problem name..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="input input-primary w-full max-w-[250px]"
+            // Updated input class to use DaisyUI's base styles
+            className="input input-bordered w-full max-w-[250px]"
           />
 
           <select
-            className="select select-primary w-full max-w-[180px] text-base"
+            // Updated select class to use DaisyUI's base styles
+            className="select select-bordered w-full max-w-[180px] text-base"
             value={filter.status}
             onChange={(e) => setFilter({ ...filter, status: e.target.value })}
           >
@@ -234,7 +256,8 @@ function HomePage() {
           </select>
 
           <select
-            className="select select-primary w-full max-w-[180px] text-base"
+            // Updated select class to use DaisyUI's base styles
+            className="select select-bordered w-full max-w-[180px] text-base"
             value={filter.difficulity}
             onChange={(e) =>
               setFilter({ ...filter, difficulity: e.target.value })
@@ -247,7 +270,8 @@ function HomePage() {
           </select>
 
           <select
-            className="select select-primary w-full max-w-[180px] text-base"
+            // Updated select class to use DaisyUI's base styles
+            className="select select-bordered w-full max-w-[180px] text-base"
             value={filter.tag}
             onChange={(e) => setFilter({ ...filter, tag: e.target.value })}
           >
@@ -273,7 +297,7 @@ function HomePage() {
               >
                 <div className="card-body">
                   <button
-                    className="card-title text-xl font-bold mb-2 text-green-500"
+                    className="card-title text-xl font-bold mb-2 text-success cursor-pointer hover:text-success-focus transition-colors duration-200"
                     onClick={() =>
                       (window.location.href = `/problem/${problemItem._id}`)
                     }

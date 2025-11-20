@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import axiosClient from "../utils/axiosClient";
 import { ThumbsUp, ThumbsDown } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 export default function Editorial({ problem }) {
   const navigate = useNavigate();
+  const { theme } = useSelector((state) => state.theme);
 
   const [video, setVideo] = useState(null);
   const [like, setLike] = useState(0);
@@ -46,40 +48,33 @@ export default function Editorial({ problem }) {
     fetchLikes();
   }, [video?._id]);
 
-  useEffect(() => {
-    console.log(video?._d);
-    console.log(like);
-    console.log(disLike);
-  });
-
   return (
-    <div>
+    <div className="min-h-screen bg-base-200 p-4" data-theme={theme}>
       {status === "created" ? (
-        <div className="max-w-2xl mx-auto p-4">
+        <div className="max-w-4xl mx-auto">
           {/* Problem Title */}
-          <h1 className="flex justify-center text-2xl font-bold text-white bg-gradient-to-r from-gray-500 to-blue-900 p-3 rounded-xl shadow-md">
+          <h1 className="text-center text-3xl font-bold text-base-content bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent p-4 rounded-xl shadow-lg mb-6">
             {problem.tittle}
           </h1>
 
-          <div className="mt-6 border border-gray-700 rounded-2xl bg-gray-900 shadow-lg p-5">
-            <div className="flex justify-center flex-col items-center">
+          <div className="bg-base-100 rounded-2xl shadow-xl p-6 border border-base-300">
+            <div className="flex flex-col items-center">
               {video ? (
-                <div className="flex flex-col items-center w-full">
+                <div className="w-full max-w-2xl">
                   {/* Video */}
                   <video
                     src={video.secureUrl}
                     poster={video.thumbnailUrl}
                     controls
-                    width="100%"
-                    className="rounded-2xl shadow-xl border border-gray-700 max-w-md mb-4"
+                    className="w-full rounded-2xl shadow-lg border border-base-300 mb-6"
                   />
 
-                  {/*  Like /  Dislike Buttons */}
-                  <div className="flex justify-center mt-3 p-2 w-full">
-                    <div className="flex items-center gap-6 bg-gray-800 px-6 py-3 rounded-full border border-gray-700 shadow-inner">
+                  {/* Like / Dislike Buttons */}
+                  <div className="flex justify-center mb-6">
+                    <div className="flex items-center gap-4 bg-base-200 px-6 py-3 rounded-full shadow-md">
                       {/* Like Button */}
                       <button
-                        className="flex items-center gap-2 px-4 py-2 rounded-full text-gray-300 hover:bg-yellow-400 hover:text-gray-900 transition-all duration-300 cursor-pointer"
+                        className="btn btn-success btn-sm gap-2 hover:scale-105 transition-transform"
                         onClick={async () => {
                           try {
                             await axiosClient.post(`/video/like/${video._id}`, {
@@ -92,13 +87,13 @@ export default function Editorial({ problem }) {
                           }
                         }}
                       >
-                        <ThumbsUp className="w-5 h-5" />
-                        <span className="font-semibold text-sm">{like}</span>
+                        <ThumbsUp className="w-4 h-4" />
+                        <span className="font-semibold">{like}</span>
                       </button>
 
                       {/* Dislike Button */}
                       <button
-                        className="flex items-center gap-2 px-4 py-2 rounded-full text-gray-300 hover:bg-red-500 hover:text-white transition-all duration-300 cursor-pointer"
+                        className="btn btn-error btn-sm gap-2 hover:scale-105 transition-transform"
                         onClick={async () => {
                           try {
                             await axiosClient.post(`/video/like/${video._id}`, {
@@ -111,40 +106,40 @@ export default function Editorial({ problem }) {
                           }
                         }}
                       >
-                        <ThumbsDown className="w-5 h-5" />
-                        <span className="font-semibold text-sm">{disLike}</span>
+                        <ThumbsDown className="w-4 h-4" />
+                        <span className="font-semibold">{disLike}</span>
                       </button>
                     </div>
                   </div>
 
-                  {/* Comments Section (Static UI only) */}
-                  <div className="w-full max-w-md mt-6">
-                    {/* Example Comments */}
-                    <div className="space-y-3">
+                  {/* Comments Section */}
+                  <div className="w-full">
+                    <h3 className="text-xl font-semibold text-base-content mb-4">Comments</h3>
+                    <div className="space-y-3 mb-6">
                       {Comments.length > 0 ? (
                         Comments.map((comment, index) => (
-                          <div key={index} className="bg-gray-800 p-3 rounded-lg border border-gray-700">
-                            <p className="text-gray-200 text-sm">{comment}</p>
+                          <div key={index} className="bg-base-200 p-3 rounded-lg shadow-sm border border-base-300">
+                            <p className="text-base-content text-sm">{comment}</p>
                           </div>
                         ))
                       ) : (
-                        <div className="bg-gray-800 p-3 rounded-lg border border-gray-700">
-                          <p className="text-gray-400 text-sm">No comments yet. Be the first to comment!</p>
+                        <div className="bg-base-200 p-3 rounded-lg shadow-sm border border-base-300">
+                          <p className="text-base-content/60 text-sm">No comments yet. Be the first to comment!</p>
                         </div>
                       )}
                     </div>
 
                     {/* Input Box */}
-                    <div className="flex items-center gap-2 mb-4 mt-8">
+                    <div className="flex gap-2">
                       <input
                         type="text"
                         placeholder="Add a comment..."
                         value={commentInput}
                         onChange={(e) => setCommentInput(e.target.value)}
-                        className="flex-1 px-4 py-2 bg-gray-800 border border-gray-700 rounded-xl text-gray-200 placeholder-gray-400 focus:outline-none"
+                        className="input input-bordered flex-1"
                       />
                       <button
-                        className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl transition-all duration-300"
+                        className="btn btn-primary"
                         onClick={async () => {
                           if (!commentInput.trim()) return;
                           try {
@@ -164,18 +159,21 @@ export default function Editorial({ problem }) {
                   </div>
                 </div>
               ) : (
-                <p className="text-gray-500">Loading video...</p>
+                <div className="flex justify-center items-center py-8">
+                  <span className="loading loading-spinner loading-lg text-primary"></span>
+                  <span className="ml-2 text-base-content">Loading video...</span>
+                </div>
               )}
             </div>
           </div>
         </div>
       ) : (
-        <div className="flex flex-col justify-center items-center h-screen bg-[#1e1e1e] text-white space-y-6">
+        <div className="flex flex-col justify-center items-center min-h-screen bg-base-200 text-base-content space-y-6">
           {/* Lock Icon */}
-          <div className="bg-[#2d2d2d] p-4 rounded-full">
+          <div className="bg-base-100 p-6 rounded-full shadow-lg">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-10 w-10 text-orange-400"
+              className="h-12 w-12 text-warning"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -190,21 +188,21 @@ export default function Editorial({ problem }) {
           </div>
 
           {/* Text */}
-          <h2 className="text-2xl font-semibold">Subscribe to unlock.</h2>
-          <p className="text-gray-400 text-center max-w-md">
+          <h2 className="text-3xl font-bold text-base-content">Subscribe to unlock</h2>
+          <p className="text-base-content/70 text-center max-w-md text-lg">
             Thanks for using{" "}
-            <span className="text-white font-medium">AlgoSnap</span>! To view
+            <span className="font-semibold text-primary">AlgoRank</span>! To view
             this solution you must subscribe to premium.
           </p>
 
           {/* Subscribe Button */}
           <button
-            className="flex justify-center items-center px-8 py-3 rounded-xl text-lg font-semibold bg-orange-400 text-black hover:bg-orange-500 transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-orange-500/30"
+            className="btn btn-warning btn-lg hover:scale-105 transition-transform shadow-lg"
             onClick={() =>
               navigate("/Payment", { state: { problem_ID: problem._id } })
             }
           >
-            Subscribe
+            Subscribe Now
           </button>
         </div>
       )}

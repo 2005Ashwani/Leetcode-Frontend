@@ -17,10 +17,9 @@ import {
   setResult,
 } from "../redux/codeSlicer";
 
-
-
 const ProblemPage = () => {
   const dispatch = useDispatch();
+  const { theme } = useSelector((state) => state.theme);
 
   // Get codes object and selectedLanguage from Redux
   const { codes, selectedLanguage, result } = useSelector(
@@ -161,87 +160,90 @@ const ProblemPage = () => {
   }, [result]);
 
   return (
-    <div className="p-3">
+    <div className="min-h-screen bg-base-200 p-3" data-theme={theme}>
       {isLoading ? (
-<div className="grid grid-cols-1 gap-6 p-6 bg-base-100 rounded-lg shadow-md">
-  {[...Array(3)].map((_, i) => (
-    <div key={i} className="animate-pulse space-y-4">
-      <div className="h-6 bg-base-300 rounded w-1/3 mx-auto"></div>
-      <div className="h-4 bg-base-300 rounded w-3/4 mx-auto"></div>
-      <div className="h-4 bg-base-300 rounded w-5/6 mx-auto"></div>
-    </div>
-  ))}
-</div>
+        <div className="grid grid-cols-1 gap-6 p-6 bg-base-100 rounded-lg shadow-lg animate-pulse">
+          {[...Array(3)].map((_, i) => (
+            <div key={i} className="space-y-4">
+              <div className="h-6 bg-base-300 rounded w-1/3 mx-auto"></div>
+              <div className="h-4 bg-base-300 rounded w-3/4 mx-auto"></div>
+              <div className="h-4 bg-base-300 rounded w-5/6 mx-auto"></div>
+            </div>
+          ))}
+        </div>
       ) : !problem ? (
-        <div className="text-center text-red-500">Problem not found</div>
+        <div className="text-center text-error text-xl font-semibold">Problem not found</div>
       ) : (
-        <div className="flex gap-3 m-2">
+        <div className="flex flex-col lg:flex-row gap-3 m-2">
           {/* Left Panel */}
-          <div className="p-3 rounded-lg w-[50%]">
-            <div className="flex justify-evenly mb-4">
+          <div className="p-3 rounded-lg w-full lg:w-1/2 bg-base-100 shadow-lg">
+            <div className="flex flex-wrap justify-center gap-2 mb-4">
               <button
                 onClick={() => setLeftContent("Description")}
-                className="btn"
+                className="btn btn-primary btn-sm"
               >
                 Description
               </button>
               <button
                 onClick={() => setLeftContent("Editorial")}
-                className="btn"
+                className="btn btn-secondary btn-sm"
               >
                 Editorial
               </button>
               <button
                 onClick={() => setLeftContent("Solution")}
-                className="btn"
+                className="btn btn-accent btn-sm"
               >
                 Solution
               </button>
               <button
                 onClick={() => setLeftContent("Submission")}
-                className="btn"
+                className="btn btn-info btn-sm"
               >
                 Submission
               </button>
-              <button onClick={() => setLeftContent("chatAI")} className="btn">
+              <button onClick={() => setLeftContent("chatAI")} className="btn btn-warning btn-sm">
                 ChatAI
               </button>
             </div>
 
             {leftContent === "Description" && (
-              <div className="bg-gray-700 text-white p-3 rounded-lg shadow h-[93%] overflow-y-auto">
-                <h1 className="text-3xl font-bold mb-4">{problem?.tittle}</h1>
+              <div className="bg-base-100 p-3 rounded-lg shadow-lg h-[80vh] overflow-y-auto">
+                <h1 className="text-3xl font-bold mb-4 text-base-content">{problem?.tittle}</h1>
 
-                <div className="mb-4">
-                  <span className="font-semibold">Difficulty: </span>
-                  <span className="text-green-400">
+                <div className="mb-4 flex flex-wrap gap-4">
+                  <span className="font-semibold text-base-content">Difficulty: </span>
+                  <span className={`badge ${problem.difficulty === 'easy' ? 'badge-success' : problem.difficulty === 'medium' ? 'badge-warning' : 'badge-error'}`}>
                     {problem.difficulty.toUpperCase()}
                   </span>
-                  <span className="ml-4 font-semibold">Tags: </span>
-                  <span className="text-green-400">
+                  <span className="font-semibold text-base-content">Tags: </span>
+                  <span className="badge badge-info">
                     {problem.tags.toUpperCase()}
                   </span>
                 </div>
 
                 <div className="prose max-w-none mb-4">
-                  <h2 className="text-xl font-semibold mb-2">Description</h2>
-                  <p>{problem.description}</p>
+                  <h2 className="text-xl font-semibold mb-2 text-base-content">Description</h2>
+                  <p className="text-base-content">{problem.description}</p>
                 </div>
 
                 {problem.visibleTestCases?.length > 0 && (
                   <div className="mb-4">
-                    <h2 className="text-xl font-semibold mb-2">
+                    <h2 className="text-xl font-semibold mb-2 text-base-content">
                       Example Test Cases
                     </h2>
                     {problem.visibleTestCases.map((testCase, index) => (
-                      <div key={index} className="mb-2 p-2 bg-gray-700 rounded">
-                        <div>
+                      <div
+                        key={index}
+                        className="mb-2 p-3 bg-base-200 rounded-lg shadow-sm"
+                      >
+                        <div className="text-base-content">
                           <strong>Input:</strong> {testCase.input}
                         </div>
-                        <div>
+                        <div className="text-base-content">
                           <strong>Output:</strong> {testCase.output}
                         </div>
-                        <div>
+                        <div className="text-base-content">
                           <strong>Explanation:</strong> {testCase.explanation}
                         </div>
                       </div>
@@ -252,16 +254,16 @@ const ProblemPage = () => {
             )}
 
             {leftContent === "Solution" && (
-              <div>
-                <div className="flex justify-around">
-                  <div className="font-bold text-2xl flex justify-center">
+              <div className="bg-base-100 p-3 rounded-lg shadow-lg h-[80vh] overflow-y-auto">
+                <div className="flex flex-col lg:flex-row justify-between mb-4">
+                  <div className="font-bold text-2xl text-base-content">
                     {problem?.tittle}
                   </div>
-                  <div className="flex justify-start text-xl text-red-500">
+                  <div className="text-xl text-error font-semibold">
                     {problem?.referenceSolution[0]?.language}
                   </div>
                 </div>
-                <div>
+                <div className="bg-base-200 p-3 rounded-lg">
                   <SyntaxHighlighter language="cpp" style={dark}>
                     {problem?.referenceSolution?.[0]?.completeCode}
                   </SyntaxHighlighter>
@@ -272,8 +274,8 @@ const ProblemPage = () => {
             {leftContent === "Editorial" && <Editorial problem={problem} />}
 
             {leftContent === "chatAI" && (
-              <div>
-                <h2 className="flex justify-center text-2xl font-bold">
+              <div className="bg-base-100 p-3 rounded-lg shadow-lg h-[80vh]">
+                <h2 className="flex justify-center text-2xl font-bold text-base-content mb-4">
                   CHAT WITH AI
                 </h2>
                 <div>
@@ -283,44 +285,32 @@ const ProblemPage = () => {
             )}
 
             {leftContent === "Submission" && (
-              <div className="text-gray-500">
+              <div className="bg-base-100 p-3 rounded-lg shadow-lg h-[80vh] overflow-y-auto">
                 <ProblemSubmission problemId={problemId} />
               </div>
             )}
           </div>
 
           {/* Right Panel - Code Editor */}
-          <div className="flex flex-col p-4 w-1/2 bg-gray-800 rounded-2xl shadow-lg border border-gray-700">
+          <div className="flex flex-col p-4 w-full lg:w-1/2 bg-base-100 rounded-2xl shadow-lg border border-base-300">
             {/* Toolbar */}
-            <div className="flex justify-between items-center mb-3">
-              <div className="flex gap-3">
+            <div className="flex flex-wrap justify-between items-center mb-3 gap-2">
+              <div className="flex gap-2">
                 <button
                   onClick={() => setRightContent("code")}
-                  className={`px-4 py-2 rounded-lg ${
-                    rightContent === "code"
-                      ? "bg-blue-600 text-white"
-                      : "bg-gray-700 text-gray-300 hover:bg-gray-600 cursor-pointer"
-                  }`}
+                  className={`btn btn-sm ${rightContent === "code" ? "btn-active" : ""}`}
                 >
                   Code
                 </button>
                 <button
                   onClick={() => setRightContent("testcode")}
-                  className={`px-4 py-2 rounded-lg ${
-                    rightContent === "testcode"
-                      ? "bg-blue-600 text-white"
-                      : "bg-gray-700 text-gray-300 hover:bg-gray-600 cursor-pointer"
-                  }`}
+                  className={`btn btn-sm ${rightContent === "testcode" ? "btn-active" : ""}`}
                 >
                   Test Cases
                 </button>
                 <button
                   onClick={() => setRightContent("result")}
-                  className={`px-4 py-2 rounded-lg ${
-                    rightContent === "result"
-                      ? "bg-blue-600 text-white"
-                      : "bg-gray-700 text-gray-300 hover:bg-gray-600 cursor-pointer"
-                  }`}
+                  className={`btn btn-sm ${rightContent === "result" ? "btn-active" : ""}`}
                 >
                   Result
                 </button>
@@ -329,47 +319,33 @@ const ProblemPage = () => {
               <button
                 onClick={handleRunCode}
                 disabled={isLoading}
-                className="px-5 py-2 bg-yellow-600 text-white rounded-xl shadow hover:bg-yellow-500 transition cursor-pointer disabled:opacity-50"
+                className="btn btn-warning btn-sm"
               >
                 {isLoading ? "Running..." : "Run"}
               </button>
             </div>
 
             {/* Editor Content */}
-            <div className="flex flex-col bg-gray-900 rounded-xl shadow-inner overflow-hidden h-[75vh]">
+            <div className="flex flex-col bg-base-200 rounded-xl shadow-inner overflow-hidden h-[75vh]">
               {rightContent === "code" && (
                 <div className="flex flex-col h-full">
                   {/* Language Buttons */}
-                  <div className="flex gap-4 bg-gray-800 px-4 py-2 border-b border-gray-700">
+                  <div className="flex gap-2 bg-base-300 px-4 py-2 border-b border-base-content/20">
                     <button
                       onClick={() => dispatch(setSelectedLanguage("cpp"))}
-                      className={`px-3 py-1 rounded-lg ${
-                        selectedLanguage === "cpp"
-                          ? "bg-yellow-600 text-white"
-                          : "bg-gray-700 text-gray-300 hover:bg-gray-600 cursor-pointer"
-                      }`}
+                      className={`btn btn-xs ${selectedLanguage === "cpp" ? "btn-active" : ""}`}
                     >
                       C++
                     </button>
                     <button
                       onClick={() => dispatch(setSelectedLanguage("Java"))}
-                      className={`px-3 py-1 rounded-lg ${
-                        selectedLanguage === "Java"
-                          ? "bg-purple-600 text-white"
-                          : "bg-gray-700 text-gray-300 hover:bg-gray-600 cursor-pointer"
-                      }`}
+                      className={`btn btn-xs ${selectedLanguage === "Java" ? "btn-active" : ""}`}
                     >
                       Java
                     </button>
                     <button
-                      onClick={() =>
-                        dispatch(setSelectedLanguage("JavaScript"))
-                      }
-                      className={`px-3 py-1 rounded-lg ${
-                        selectedLanguage === "JavaScript"
-                          ? "bg-yellow-500 text-black"
-                          : "bg-gray-700 text-gray-300 hover:bg-gray-600 cursor-pointer"
-                      }`}
+                      onClick={() => dispatch(setSelectedLanguage("JavaScript"))}
+                      className={`btn btn-xs ${selectedLanguage === "JavaScript" ? "btn-active" : ""}`}
                     >
                       JavaScript
                     </button>
@@ -396,38 +372,29 @@ const ProblemPage = () => {
 
               {rightContent === "testcode" && result && (
                 <div
-                  className={`${
+                  className={`p-4 w-full m-4 rounded-2xl shadow-lg ${
                     result?.accepted?.status?.toLowerCase?.() === "accepted" ||
                     result?.status?.description?.toLowerCase?.() === "accepted"
-                      ? "bg-green-400 text-green-900"
-                      : "bg-red-400 text-white"
-                  } p-4 w-[80%] m-8 rounded-2xl`}
+                      ? "bg-success text-success-content"
+                      : "bg-error text-error-content"
+                  }`}
                 >
-                  <div>
-                    <h1>
-                      Status:
-                      {result?.status?.description || result?.accepted?.status}
-                    </h1>
+                  <div className="font-semibold">
+                    <h1>Status: {result?.status?.description || result?.accepted?.status}</h1>
                     <h1>Memory: {result?.memory} KB</h1>
                     <h1>Runtime: {result?.time || result?.runTime} Sec</h1>
                   </div>
 
                   {problem.visibleTestCases?.length > 0 && (
-                    <div>
+                    <div className="mt-4">
                       {problem.visibleTestCases.map((testCase, index) => (
                         <div
                           key={index}
-                          className="mt-2 p-3 text-white bg-black rounded-2xl"
+                          className="mt-2 p-3 bg-base-100 rounded-lg text-base-content"
                         >
-                          <div>
-                            <strong>Input:</strong> {testCase.input}
-                          </div>
-                          <div>
-                            <strong>Output:</strong> {testCase.output}
-                          </div>
-                          <div>
-                            <strong>Explanation:</strong> {testCase.explanation}
-                          </div>
+                          <div><strong>Input:</strong> {testCase.input}</div>
+                          <div><strong>Output:</strong> {testCase.output}</div>
+                          <div><strong>Explanation:</strong> {testCase.explanation}</div>
                         </div>
                       ))}
                     </div>
@@ -436,16 +403,12 @@ const ProblemPage = () => {
               )}
 
               {rightContent === "result" && result && (
-                <div className="text-green-900 p-4 bg-green-400 w-[80%] m-8 rounded-2xl">
-                  <h1>
-                    Status:
-                    {result?.status?.description || result?.accepted?.status}
+                <div className="p-4 bg-success text-success-content w-full m-4 rounded-2xl shadow-lg">
+                  <h1 className="font-semibold">
+                    Status: {result?.status?.description || result?.accepted?.status}
                   </h1>
                   {result?.passedTestCases !== undefined && (
-                    <h1>
-                      Test Cases Passed: {result.passedTestCases}/
-                      {result.totalTestCases}
-                    </h1>
+                    <h1>Test Cases Passed: {result.passedTestCases}/{result.totalTestCases}</h1>
                   )}
                   <h1>Memory: {result?.memory} KB</h1>
                   <h1>Runtime: {result?.time || result?.runTime} Sec</h1>
@@ -453,7 +416,7 @@ const ProblemPage = () => {
               )}
 
               {rightContent === "result" && !result && (
-                <div className="text-gray-400 p-4 m-8">
+                <div className="text-base-content/60 p-4 m-4 text-center">
                   No results yet. Run or submit your code to see results.
                 </div>
               )}
@@ -462,7 +425,7 @@ const ProblemPage = () => {
             <button
               onClick={handleSubmitCode}
               disabled={isLoading}
-              className="px-5 py-2 mt-10 bg-green-600 text-white rounded-xl shadow hover:bg-green-500 transition cursor-pointer disabled:opacity-50"
+              className="btn btn-success btn-sm mt-4"
             >
               {isLoading ? "Submitting..." : "Submit"}
             </button>

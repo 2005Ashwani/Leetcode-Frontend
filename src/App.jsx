@@ -41,6 +41,8 @@ import AI from "./AlgoSnap/component/AI";
 import Razorpay from "./component/Razorpay";
 import Payment from "./component/Payment";
 
+// import "daisyui/dist/full.css";
+
 function App() {
   // code   likhana  isAuthentication  ke liye
   // Taki user jab vi  website open kara to automatic call jya backend  per token ka sath

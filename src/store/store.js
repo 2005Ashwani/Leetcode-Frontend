@@ -4,6 +4,7 @@ import authReducer from "../redux/authSlice";
 import chatHistoryReducer from "../redux/AiHistorySlicer_ALGORANK"
 import codeHistoryReducer from "../redux/codeSlicer";
 import AlgoSnapAIReducer from "../redux/AlgoSnapHistory";
+import themeReducer from "../redux/Theme";
 
 // Me
 
@@ -14,6 +15,8 @@ export const store = configureStore({
     storeCode: codeHistoryReducer,    // Slice to store code
     AlgoSnapAI: AlgoSnapAIReducer,   // To Store the History of AlgoRank
 
+
+    theme: themeReducer,
 
 
 

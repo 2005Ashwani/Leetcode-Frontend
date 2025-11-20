@@ -3,7 +3,7 @@ import axiosClient from "../utils/axiosClient";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
+import { useSelector } from "react-redux";
 
 export default function DashBoard() {
   const [isLoading, setIsLoading] = useState(false);
@@ -119,33 +119,30 @@ export default function DashBoard() {
   }, [matched, getProfile]); //
 
   return (
-    <div>
-      {/* ... (rest of the component remains the same) */}
+    <div className="min-h-screen bg-base-200 text-base-content p-6" data-theme={useSelector((state) => state.theme.theme)}>
       {isLoading === false ? (
-        <div className="min-h-screen bg-[#0d1117] text-white p-6 flex flex-col md:flex-row gap-6">
-          {/* ... (Left Profile Card) ... */}
-          <div className="bg-[#161b22] p-5 rounded-xl w-full md:w-1/4 border border-gray-800">
-            {/* ... (Profile details) ... */}
-            <div className="flex flex-col items-center">
+        <div className="flex flex-col lg:flex-row gap-6">
+          {/* Left Profile Card */}
+          <div className="bg-base-100 p-6 rounded-2xl shadow-xl w-full lg:w-1/4 border border-base-300">
+            <div className="flex flex-col items-center text-center">
               <img
                 src={getProfile.profileImage}
                 alt="profile"
-                className="w-24 h-24 rounded-full border-2 border-purple-500"
+                className="w-24 h-24 rounded-full border-4 border-primary shadow-lg mb-4"
               />
 
-              <h2 className="mt-3 text-lg font-semibold">
-                {getProfile.firstName}
-                {" " + getProfile.lastName}
+              <h2 className="text-xl font-bold text-base-content">
+                {getProfile.firstName} {getProfile.lastName}
               </h2>
 
-              <p className="text-sm text-gray-400">{getProfile.email}</p>
+              <p className="text-base-content/70 mb-2">{getProfile.email}</p>
 
-              <p className="text-sm mt-2 text-center text-gray-300">
-                Interested in coding and web development
+              <p className="text-sm text-base-content/60 mb-4">
+                Passionate about coding and web development
               </p>
 
               <button
-                className="mt-4 bg-green-600 hover:bg-green-700 px-4 py-1 rounded-md text-sm font-medium"
+                className="btn btn-primary btn-sm"
                 onClick={() => navigate("/edit")}
               >
                 Edit Profile
@@ -153,26 +150,33 @@ export default function DashBoard() {
             </div>
 
             <div className="mt-6 space-y-3 text-sm">
-              <div>📍 India</div>
-              <div>🎓 ABSS Institute Of Technology Meerut</div>
+              <div className="flex items-center gap-2">
+                <span>📍</span>
+                <span>India</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span>🎓</span>
+                <span>ABSS Institute Of Technology Meerut</span>
+              </div>
               <a
                 href="https://ashwanitech.netlify.app/"
-                target="blank"
-                className="flex items-center gap-2 text-blue-400 hover:underline"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-primary hover:underline"
               >
-                <Globe size={16} /> Contact Me
+                <Globe size={16} /> Portfolio
               </a>
               <div className="flex gap-3 mt-2">
-                <Github className="cursor-pointer" size={18} />
-                <Twitter className="cursor-pointer" size={18} />
-                <Linkedin className="cursor-pointer" size={18} />
+                <Github className="cursor-pointer hover:scale-110 transition-transform" size={18} />
+                <Twitter className="cursor-pointer hover:scale-110 transition-transform" size={18} />
+                <Linkedin className="cursor-pointer hover:scale-110 transition-transform" size={18} />
               </div>
 
               <div className="flex flex-wrap gap-2 mt-4">
                 {["Python", "C", "HTML", "CSS", "JavaScript"].map((lang) => (
                   <span
                     key={lang}
-                    className="bg-gray-800 text-xs px-2 py-1 rounded-md border border-gray-700"
+                    className="badge badge-outline text-xs"
                   >
                     {lang}
                   </span>
@@ -180,14 +184,14 @@ export default function DashBoard() {
               </div>
             </div>
 
-            <div className="mt-6 border-t border-gray-700 pt-4">
-              <h3 className="font-semibold mb-2">Community Stats</h3>
-              <div className="flex justify-between text-gray-400 text-sm">
+            <div className="mt-6 border-t border-base-300 pt-4">
+              <h3 className="font-semibold mb-2 text-base-content">Community Stats</h3>
+              <div className="flex justify-between text-base-content/70 text-sm">
                 <span>Views</span>
                 <span>0</span>
               </div>
-              <div className="flex justify-between text-gray-400 text-sm">
-                <span>Solution</span>
+              <div className="flex justify-between text-base-content/70 text-sm">
+                <span>Solutions</span>
                 <span>0</span>
               </div>
             </div>
@@ -196,38 +200,34 @@ export default function DashBoard() {
           {/* Right Dashboard Content */}
           <div className="flex-1 space-y-6">
             {/* Progress + Rank Section */}
-            <div className="flex flex-wrap gap-6">
-              {/* Program  */}
-              <div className="bg-[#161b22] border border-gray-800 rounded-xl p-5 flex-1 min-w-[300px] flex justify-evenly">
+            <div className="flex flex-col lg:flex-row gap-6">
+              {/* Problems Solved */}
+              <div className="bg-base-100 border border-base-300 rounded-2xl p-6 shadow-xl flex-1 min-w-[300px] flex flex-col lg:flex-row justify-around items-center">
                 {/* Problem Solved Section */}
                 <div className="flex flex-col items-center justify-center p-4">
-                  <h3 className="text-gray-300 font-semibold mb-6 uppercase tracking-wider">
+                  <h3 className="text-base-content font-semibold mb-6 uppercase tracking-wider text-lg">
                     Problems Solved
                   </h3>
 
-                  {/* Interactive Total Problem Circle - Perfectly Centered Content */}
-                  {/* W-48/H-48 for better visual, group for hover effect, relative for positioning */}
+                  {/* Interactive Total Problem Circle */}
                   <div className="relative w-48 h-48 group">
-                    {}
-                    <div className="absolute inset-0 rounded-full border-[8px] border-yellow-500 flex flex-col items-center justify-center transition-opacity duration-300 group-hover:opacity-0">
-                      <span className="text-4xl font-extrabold text-white leading-none">
+                    <div className="absolute inset-0 rounded-full border-[8px] border-warning flex flex-col items-center justify-center transition-opacity duration-300 group-hover:opacity-0">
+                      <span className="text-4xl font-extrabold text-base-content leading-none">
                         {getProfile?.problemSolved?.length}
                       </span>
-                      <span className="text-lg font-medium text-gray-400">
+                      <span className="text-lg font-medium text-base-content/70">
                         / {totalProblem?.length}
                       </span>
                     </div>
 
-                    {}
-                    <div className="absolute inset-0 rounded-full bg-gray-900 border-[8px] border-gray-700 flex flex-col items-center justify-center p-5 opacity-0 group-hover:opacity-100 transition duration-300 transform scale-95 group-hover:scale-100">
-                      <p className="text-md font-bold text-green-400 mb-1">
+                    <div className="absolute inset-0 rounded-full bg-base-200 border-[8px] border-base-300 flex flex-col items-center justify-center p-5 opacity-0 group-hover:opacity-100 transition duration-300 transform scale-95 group-hover:scale-100">
+                      <p className="text-sm font-bold text-success mb-1">
                         Easy: <span className="text-xl">{easy?.length}</span>
                       </p>
-                      <p className="text-md font-bold text-orange-400 mb-1">
-                        Medium:{" "}
-                        <span className="text-xl">{medium?.length}</span>
+                      <p className="text-sm font-bold text-warning mb-1">
+                        Medium: <span className="text-xl">{medium?.length}</span>
                       </p>
-                      <p className="text-md font-bold text-red-500">
+                      <p className="text-sm font-bold text-error">
                         Hard: <span className="text-xl">{hard?.length}</span>
                       </p>
                     </div>
@@ -236,23 +236,21 @@ export default function DashBoard() {
 
                 {/* Difficulty Stats Section */}
                 <div className="flex flex-col gap-4 pt-4">
-                  <h3 className="text-gray-400 font-medium text-center uppercase text-sm tracking-widest">
+                  <h3 className="text-base-content/70 font-medium text-center uppercase text-sm tracking-widest">
                     Difficulty Stats
                   </h3>
                   <div className="flex flex-col gap-3">
-                    {/* Increased contrast/hover on difficulty boxes for better UI */}
-                    <div className="h-16 w-40 p-2 text-lg flex justify-center items-center bg-gray-800 hover:bg-green-900/40 transition text-green-400 rounded-xl shadow-md">
+                    <div className="h-16 w-40 p-2 text-lg flex justify-center items-center bg-base-200 hover:bg-success/20 transition text-success rounded-xl shadow-md">
                       <p>
                         Easy: <span className="font-bold">{easy?.length}</span>
                       </p>
                     </div>
-                    <div className="h-16 w-40 p-2 text-lg flex justify-center items-center bg-gray-800 hover:bg-orange-900/40 transition text-orange-400 rounded-xl shadow-md">
+                    <div className="h-16 w-40 p-2 text-lg flex justify-center items-center bg-base-200 hover:bg-warning/20 transition text-warning rounded-xl shadow-md">
                       <p>
-                        Medium:{" "}
-                        <span className="font-bold">{medium?.length}</span>
+                        Medium: <span className="font-bold">{medium?.length}</span>
                       </p>
                     </div>
-                    <div className="h-16 w-40 p-2 text-lg flex justify-center items-center bg-gray-800 hover:bg-red-900/40 transition text-red-500 rounded-xl shadow-md">
+                    <div className="h-16 w-40 p-2 text-lg flex justify-center items-center bg-base-200 hover:bg-error/20 transition text-error rounded-xl shadow-md">
                       <p>
                         Hard: <span className="font-bold">{hard?.length}</span>
                       </p>
@@ -261,18 +259,19 @@ export default function DashBoard() {
                 </div>
               </div>
 
-              <div className="bg-[#161b22] border border-gray-800 rounded-xl p-5 w-64 flex justify-center items-center  ">
-                <div className="flex justify-center items-center border- bg-gray-700 w-50 h-50 rounded-full border-[6px] border-yellow-500">
-                  <h1 className="font-semibold text-2xl">Rank</h1>
-                  <h3 className="text-2xl font-bold">
+              {/* Rank Card */}
+              <div className="bg-base-100 border border-base-300 rounded-2xl p-6 w-full lg:w-64 flex justify-center items-center shadow-xl">
+                <div className="flex flex-col justify-center items-center bg-base-200 w-48 h-48 rounded-full border-[6px] border-warning shadow-lg">
+                  <h1 className="font-semibold text-2xl text-base-content">Rank</h1>
+                  <h3 className="text-3xl font-bold text-base-content">
                     ~
-                    {SolvedProblem[0]?.difficulty == "easy"
+                    {SolvedProblem[0]?.difficulty === "easy"
                       ? Math.ceil(
                           (SolvedProblem?.length / totalProblem?.length) *
                             100 *
                             1
                         )
-                      : SolvedProblem[0]?.difficulty == "medium"
+                      : SolvedProblem[0]?.difficulty === "medium"
                       ? Math.ceil(
                           (SolvedProblem?.length / totalProblem?.length) *
                             100 *
@@ -289,107 +288,92 @@ export default function DashBoard() {
             </div>
 
             {/* Activity Calendar */}
-            <div className="bg-[#161b22] border border-gray-800 rounded-xl p-5">
-              <h3 className="font-semibold mb-2">
+            <div className="bg-base-100 border border-base-300 rounded-2xl p-6 shadow-xl">
+              <h3 className="font-semibold mb-2 text-base-content text-xl">
                 Submissions in the Past Year
               </h3>
-              <p className="text-sm text-gray-400 mb-3">Total Active Days: 1</p>
+              <p className="text-base-content/70 mb-3">Total Active Days: 1</p>
               <div className="grid grid-cols-12 gap-1">
                 {Array.from({ length: 12 }).map((_, i) => (
                   <div
                     key={i}
-                    className="h-4 w-4 bg-gray-700 rounded-sm hover:bg-green-600 transition-all"
+                    className="h-4 w-4 bg-base-300 rounded-sm hover:bg-success transition-all"
                   ></div>
                 ))}
               </div>
             </div>
 
             {/* Recent AC Submissions */}
-            <div className=" border bg-[#161b22] rounded-xl p-5">
+            <div className="bg-base-100 border border-base-300 rounded-2xl p-6 shadow-xl">
               <div className="flex justify-between items-center mb-4">
-                <h3 className="font-semibold text-xl">
+                <h3 className="font-semibold text-2xl text-base-content">
                   Recent Accepted Solutions
                 </h3>
-                <button className="text-blue-400 hover:underline text-xl">
+                <button className="btn btn-ghost text-primary hover:underline">
                   View all
                 </button>
               </div>
 
               <div className="space-y-3">
-                {/* // to show the recent Submitted Solution  */}
-              </div>
-
-              {/* --- Display All Problems --- */}
-              <div className="flex flex-col gap-7">
-                {SolvedProblem.length > 0 ? (
-                  // Map through all problems and render a card for each
-                  SolvedProblem.map((problemItem) => (
-                    <div
-                      key={problemItem._id}
-                      className="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow duration-300 flex items-center p-4 min-h-16"
-                    >
-                      {/* The card-body now acts as the single-line content wrapper */}
-                      <div className="card-body flex flex-row items-center justify-between p-0 w-full">
-                        {/* Problem Title with Link - Takes up available space */}
-                        <button
-                          className="card-title text-lg font-semibold mr-4 text-green-500 hover:text-green-400 whitespace-nowrap overflow-hidden text-ellipsis cursor-pointer"
-                          onClick={() =>
-                            navigate(`/problem/${problemItem._id}`)
-                          }
-                        >
-
-                          {/* Show Recent Problem  */}
-                          {problemItem?.tittle}
-                        </button>
-
-                        {/* Difficulty - Right aligned */}
-                        <div className="text-xl font-medium w-20 text-right ">
-                          {problemItem.difficulty}
-                        </div>
-
-                        {/* Time - Right aligned */}
-                        <div className="text-sm text-gray-400 w-32 text-right">
-                          {(() => {
-                            // Find the submission for this problem by the current user
-                            const matchedItem = matched?.find(
-                              (item) =>
-                                item.userId === getProfile._id &&
-                                item.problemId === problemItem._id
-                            );
-
-                            if (matchedItem) {
-                              const date = new Date(matchedItem.updatedAt);
-                              // Format: YYYY-MM-DD HH:MM:SS
-                              return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+                {/* Display All Problems */}
+                <div className="flex flex-col gap-4">
+                  {SolvedProblem.length > 0 ? (
+                    SolvedProblem.map((problemItem) => (
+                      <div
+                        key={problemItem._id}
+                        className="card bg-base-200 shadow-lg hover:shadow-xl transition-shadow duration-300 flex items-center p-4 min-h-16 border border-base-300"
+                      >
+                        <div className="card-body flex flex-row items-center justify-between p-0 w-full">
+                          {/* Problem Title with Link */}
+                          <button
+                            className="card-title text-lg font-semibold mr-4 text-success hover:text-success-focus whitespace-nowrap overflow-hidden text-ellipsis cursor-pointer"
+                            onClick={() =>
+                              navigate(`/problem/${problemItem._id}`)
                             }
+                          >
+                            {problemItem?.tittle}
+                          </button>
 
-                            return "-";
-                          })()}
+                          {/* Difficulty */}
+                          <div className="text-lg font-medium w-20 text-right text-base-content">
+                            {problemItem.difficulty}
+                          </div>
+
+                          {/* Time */}
+                          <div className="text-sm text-base-content/70 w-32 text-right">
+                            {(() => {
+                              const matchedItem = matched?.find(
+                                (item) =>
+                                  item.userId === getProfile._id &&
+                                  item.problemId === problemItem._id
+                              );
+
+                              if (matchedItem) {
+                                const date = new Date(matchedItem.updatedAt);
+                                return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+                              }
+
+                              return "-";
+                            })()}
+                          </div>
                         </div>
-
-
                       </div>
+                    ))
+                  ) : (
+                    <div className="text-center p-8 bg-base-200 rounded-lg shadow-md border border-base-300">
+                      <p className="text-xl text-info font-medium">
+                        No problems solved yet. Start coding!
+                      </p>
                     </div>
-                  ))
-                ) : (
-                  // Message if no problems exist
-                  <div className="col-span-full text-center p-8 bg-gray-700 rounded-lg shadow-md border border-gray-800">
-                    <p className="text-xl text-info font-medium">
-                      No problems solved yet. Start coding!
-                    </p>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
             </div>
           </div>
         </div>
       ) : (
-        <div className="flex justify-center items-center h-screen bg-gray-900">
-          <motion.div
-            className="w-12 h-12 border-4 border-t-transparent border-purple-500 rounded-full"
-            animate={{ rotate: 360 }}
-            transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
-          />
+        <div className="flex justify-center items-center min-h-screen">
+          <span className="loading loading-spinner loading-lg text-primary"></span>
         </div>
       )}
     </div>

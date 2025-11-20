@@ -3,9 +3,11 @@ import axiosClient from "../utils/axiosClient";
 import { motion, AnimatePresence } from "framer-motion"; // Added AnimatePresence for smoother transitions
 import { useNavigate } from "react-router-dom";
 import { NavLink } from "react-router";
+import { useSelector } from "react-redux";
 
 export default function AdminVideo() {
   const navigate = useNavigate();
+  const { theme } = useSelector((state) => state.theme);
 
   const [allProblem, setAllProblem] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -82,14 +84,19 @@ export default function AdminVideo() {
     console.log(deletingId);
   });
 
+  // Define theme-based classes
+  const themeClasses = theme === 'dark'
+    ? "min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-indigo-950 text-gray-100"
+    : "min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-100 text-gray-900";
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-indigo-950 text-gray-100 font-sans p-6">
+    <div className={`${themeClasses} font-sans p-6`}>
       {/* Page Title */}
       <motion.h1
         initial={{ y: -50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="flex justify-center text-4xl md:text-5xl font-extrabold mb-8 text-indigo-400 drop-shadow-lg text-center"
+        className={`flex justify-center text-4xl md:text-5xl font-extrabold mb-8 drop-shadow-lg text-center ${theme === 'dark' ? 'text-indigo-400' : 'text-indigo-600'}`}
         style={{ fontFamily: "'Poppins', sans-serif" }}
       >
         Add Video to Problems
@@ -106,7 +113,7 @@ export default function AdminVideo() {
               repeat: Infinity,
               repeatType: "mirror",
             }}
-            className="text-2xl text-indigo-300 tracking-wide"
+            className={`text-2xl tracking-wide ${theme === 'dark' ? 'text-indigo-300' : 'text-indigo-600'}`}
           >
             Loading problems...
           </motion.p>
@@ -114,7 +121,7 @@ export default function AdminVideo() {
       ) : error ? (
         /* Error State */
         <div className="flex justify-center items-center min-h-[50vh]">
-          <p className="text-xl text-red-500">{error}</p>
+          <p className={`text-xl ${theme === 'dark' ? 'text-red-500' : 'text-red-600'}`}>{error}</p>
         </div>
       ) : allProblem.length > 0 ? (
         /* Problems List */
@@ -206,7 +213,7 @@ export default function AdminVideo() {
       ) : (
         /* Empty State */
         <div className="flex justify-center items-center min-h-[50vh]">
-          <p className="text-2xl text-gray-400">No problems found.</p>
+          <p className={`text-2xl ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>No problems found.</p>
         </div>
       )}
     </div>

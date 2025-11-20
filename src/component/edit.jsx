@@ -6,12 +6,14 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { NavLink } from "react-router";
 import { motion } from "framer-motion";
+import { useSelector } from "react-redux";
 
 
 export default function EditProfile() {
   const { register, handleSubmit, reset } = useForm();
   const [getProfile, setGetProfile] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const { theme } = useSelector((state) => state.theme);
 
   // Getting the detail of the profile and initializing form values
   useEffect(() => {
@@ -46,12 +48,12 @@ export default function EditProfile() {
   };
 
   return (
-    <div>
+    <div data-theme={theme}>
       {isLoading == false ? (
-        <div className="min-h-screen bg-gray-900 text-gray-200 p-6">
+        <div className="min-h-screen bg-base-100 text-base-content p-6">
           {/* Header Section */}
           <div className="max-w-5xl mx-auto">
-            <div className="bg-gradient-to-r from-gray-800 to-gray-900 rounded-xl p-6 shadow-lg flex items-center space-x-6">
+            <div className={`bg-gradient-to-r ${theme === 'dark' ? 'from-gray-800 to-gray-900' : 'from-base-200 to-base-300'} rounded-xl p-6 shadow-lg flex items-center space-x-6`}>
               <NavLink to={`/uploadProfile`}>
                 <img
                   src={getProfile.profileImage}
@@ -73,7 +75,7 @@ export default function EditProfile() {
             {/* Sidebar + Content */}
             <div className="flex mt-8 gap-6">
               {/* Sidebar */}
-              <div className="w-1/4 bg-gray-800 rounded-lg shadow-md p-4 space-y-4">
+              <div className={`w-1/4 ${theme === 'dark' ? 'bg-gray-800' : 'bg-base-200'} rounded-lg shadow-md p-4 space-y-4`}>
                 <button className="w-full bg-purple-600 text-white py-2 rounded-lg font-medium">
                   Basic Info
                 </button>
@@ -91,7 +93,7 @@ export default function EditProfile() {
                 </button>
               </div>
               {/* Main Edit Section */}
-              <div className="flex-1 bg-gray-800 rounded-lg shadow-lg p-6">
+              <div className={`flex-1 ${theme === 'dark' ? 'bg-gray-800' : 'bg-base-200'} rounded-lg shadow-lg p-6`}>
                 <h2 className="text-xl font-semibold text-purple-400 mb-6">
                   Basic Information
                 </h2>
@@ -159,7 +161,7 @@ export default function EditProfile() {
           </div>
         </div>
       ) : (
-        <div className="flex justify-center items-center h-screen bg-gray-900">
+        <div className={`flex justify-center items-center h-screen ${theme === 'dark' ? 'bg-gray-900' : 'bg-base-100'}`}>
           <motion.div
             className="w-12 h-12 border-4 border-t-transparent border-purple-500 rounded-full"
             animate={{ rotate: 360 }}
